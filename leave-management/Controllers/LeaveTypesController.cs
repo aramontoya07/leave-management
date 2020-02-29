@@ -33,7 +33,13 @@ namespace leave_management.Controllers
         // GET: LeaveTypes/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            if (!_repo.isExists(id))
+            {
+                return NotFound();
+            }
+            var leavetype = _repo.FindById(id);
+            var model = _mapper.Map<LeaveTypeVM>(leavetype);
+            return View(model);
         }
 
         // GET: LeaveTypes/Create
