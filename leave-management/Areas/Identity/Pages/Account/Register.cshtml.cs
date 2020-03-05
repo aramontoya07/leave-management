@@ -47,7 +47,7 @@ namespace leave_management.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Email Adress")]
             public string Email { get; set; }
 
             [Required]
@@ -60,6 +60,17 @@ namespace leave_management.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            //agregue estos dos campos en el modelo. Ahora tengo que agregarlos a la vista
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "First name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Last name")]
+            public string LastName { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
