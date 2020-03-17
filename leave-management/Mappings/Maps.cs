@@ -13,7 +13,7 @@ namespace leave_management.Mappings
         public Maps()
         {
             CreateMap<LeaveType, LeaveTypeVM>().ReverseMap(); //crea un map entre la data class y la clase destino, reverse map permite que vaya en ambas direcciones
-            CreateMap<LeaveHistory, LeaveHistoryVM>().ReverseMap();
+            CreateMap<LeaveRequest, LeaveRequestVM>().ReverseMap();
             CreateMap<LeaveAllocation, LeaveAllocationVM>().ReverseMap();
             CreateMap<LeaveAllocation, EditLeaveAllocationVM>().ReverseMap();
             CreateMap<Employee, EmployeeVM>().ReverseMap();
