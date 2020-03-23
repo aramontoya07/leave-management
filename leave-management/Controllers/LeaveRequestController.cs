@@ -53,6 +53,24 @@ namespace leave_management.Controllers
             return View(model);
         }
 
+        public ActionResult MyLeave()
+        {
+            var employee = _userManager.GetUserAsync(User).Result;
+            var employeeid = employee.Id;
+            var employeeAllocations = _leaveAllocRepo.GetLeaveAllocationsByEmployee(employeeid);
+            var employeeRequests = _leaveRequestRepo.GetLeaveRequestsByEmployee(employeeid);
+
+            var employeeAllocationModel = _mapper.Map<List<LeaveAllocationVM>>(employeeAllocations);
+            var employeeRequestModel = _mapper.Map<List<LeaveRequestVM>>(employeeRequests);
+
+            var model = new EmployeeLeaveRequestViewVM
+            {
+                LeaveAllocations = employeeAllocationModel,
+                LeaveRequests = employeeRequestModel
+            };
+            return View(model);
+        }
+
         // GET: LeaveRequest/Details/5
         public ActionResult Details(int id)
         {
@@ -183,7 +201,7 @@ namespace leave_management.Controllers
                     return View();
                 }
 
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToAction("MyLeave");
             }
             catch(Exception ex)
             {

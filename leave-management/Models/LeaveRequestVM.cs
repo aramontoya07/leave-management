@@ -66,4 +66,10 @@ namespace leave_management.Models
         [MaxLength(300)]
         public string RequestComments { get; set; }
     }
+
+    public class EmployeeLeaveRequestViewVM
+    {
+        public List<LeaveAllocationVM> LeaveAllocations { get; set; }
+        public List<LeaveRequestVM> LeaveRequests { get; set; }
+    }
 }
