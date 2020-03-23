@@ -70,11 +70,16 @@ namespace leave_management.Controllers
                 var employeeid = leaverequest.RequestingEmployeeId;
                 var leavetypeid = leaverequest.LeaveTypeId;
                 var allocation = _leaveAllocRepo.GetLeaveAllocationsByEmployeeAndType(employeeid, leavetypeid);
-
+                int daysrequested = (int)(leaverequest.EndDate - leaverequest.StartDate).TotalDays;
+                allocation.NumberOfDays -= daysrequested;
                 leaverequest.Approved = true;
                 leaverequest.ApprovedById = user.Id;
                 leaverequest.DateActioned = DateTime.Now;
-                var isSuccess = _leaveRequestRepo.Update(leaverequest);
+
+                _leaveRequestRepo.Update(leaverequest);
+                _leaveAllocRepo.Update(allocation);
+
+
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception ex)
@@ -95,7 +100,7 @@ namespace leave_management.Controllers
                 leaverequest.Approved = false;
                 leaverequest.ApprovedById = user.Id;
                 leaverequest.DateActioned = DateTime.Now;
-                var isSuccess = _leaveRequestRepo.Update(leaverequest);
+                _leaveRequestRepo.Update(leaverequest);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
