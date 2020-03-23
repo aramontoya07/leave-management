@@ -56,7 +56,52 @@ namespace leave_management.Controllers
         // GET: LeaveRequest/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var leaverequest = _leaveRequestRepo.FindById(id);
+            var model = _mapper.Map<LeaveRequestVM>(leaverequest);
+            return View(model);
+        }
+
+        public ActionResult ApproveRequest(int id)
+        {
+            try
+            {
+                var user = _userManager.GetUserAsync(User).Result;
+                var leaverequest = _leaveRequestRepo.FindById(id);
+                var employeeid = leaverequest.RequestingEmployeeId;
+                var leavetypeid = leaverequest.LeaveTypeId;
+                var allocation = _leaveAllocRepo.GetLeaveAllocationsByEmployeeAndType(employeeid, leavetypeid);
+
+                leaverequest.Approved = true;
+                leaverequest.ApprovedById = user.Id;
+                leaverequest.DateActioned = DateTime.Now;
+                var isSuccess = _leaveRequestRepo.Update(leaverequest);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
+        }
+
+        public ActionResult RejectRequest(int id)
+        {
+            try
+            {
+                var user = _userManager.GetUserAsync(User).Result;
+                var leaverequest = _leaveRequestRepo.FindById(id);
+                var allocation = _leaveAllocRepo.GetLeaveAllocationsByEmployee(leaverequest.RequestingEmployeeId);
+
+                leaverequest.Approved = false;
+                leaverequest.ApprovedById = user.Id;
+                leaverequest.DateActioned = DateTime.Now;
+                var isSuccess = _leaveRequestRepo.Update(leaverequest);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: LeaveRequest/Create
